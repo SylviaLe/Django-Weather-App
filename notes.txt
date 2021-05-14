@@ -1,0 +1,16 @@
+So, to get an input back from an input box:
+- The form must be POST
+- Type of button is submit
+- Create a forms.py. If there is a database connected, add a model field, otherwise just specify the fields (in this case, inherit from forms.Form and specify the type of the each field)
+- In views, if request method is post, the form is bounded to the POST data. otherwise, make it an unbounded form. Sth like this:
+   if request.method == "POST":
+        form = Form(request.POST)
+
+        #do things here
+        if form.is_valid():
+            var = form.cleaned_data['field_1']
+            var_from_the_db = ...
+            var_from_the_db.save()
+    else:
+        form = Form()
+- To display, make it a context data (so it's accessible in the template). Otherwise, save() it to the template
