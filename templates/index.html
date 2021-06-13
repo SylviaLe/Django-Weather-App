@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,38 +9,68 @@
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <style>
+            input{
+                font-size: 20px;
+                margin-right: 5px;
+                background-color: transparent;
+                border-top: none;
+                border-left: none;
+                border-right: none;
+                color: white;
+            }
+            label{
+                font-size: 20px;
+            }
+        </style>
 
         <title>How's the weather today?</title>
     </head>
-    <body>
-        <h1>Weather app</h1>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="field">
-                <div class="control">
-                    {{ form }} 
-                    {#form.name or form both work here, since there is only 1 field#}
+    <body style="min-height: 100vh; height: 100%; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url({{weathers.type}}); background-size: cover; background-repeat: no-repeat;">
+        <div class="container w-75">
+            <h1 class="text-light text-center mt-3 mb-4 display-3">How's the weather today?</h1>
+            <form method="POST" class="text-center">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="control text-light">
+                        {{ form }} 
+                        {#form.name or form both work here, since there is only 1 field#}
+                    </div>
+                    <div class="control">
+                        <button class="btn btn-light text-info d-block mx-auto my-4">
+                            Search
+                        </button>
+                    </div>
+                    <div>
+                        <p>{{message}}</p>
+                    </div>
                 </div>
-                <div class="control">
-                    <button class="btn btn-dark">
-                        Add City
-                    </button>
-                </div>
-                <div>
-                    <p>{{message}}</p>
-                </div>
+            </form>
+
+
+            
+            <div class='result text-light'>
+                {% if weathers != None %}
+                    <h3 class='text-center my-4'>{{weathers.city}}</h3>
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <img src='{% static weathers.icon %}' class="img-fluid h-50">
+
+                            <h3 class='my-3'>{{weathers.temperature}}&deg;C</h3>
+                            <h5 class='my-3'>{{weathers.description}}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p class='my-3'><b>Feels like: </b>{{weathers.feel}}&deg;C</p>
+                            <p class='my-3'><b>Min temp: </b>{{weathers.min}}&deg;C</p>
+                            <p class='my-3'><b>Max temp: </b>{{weathers.max}}&deg;C</p>
+                            <p class='my-3'><b>Humidity: </b>{{weathers.humidity}}%</p>
+                            <p class='my-3'><b>Sunrise: </b>{{weathers.sunrise}}</p>
+                            <p class='my-3'><b>Sunset: </b>{{weathers.sunset}}</p>
+                            
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-        </form>
-
-
-        
-        <div class='result'>
-            {% if weathers != None %}
-                <h3>{{weathers.city}}</h3>
-                <p>{{weathers.temperature}}&deg;C</p>
-                <p>{{weathers.description}}</p>
-                <img src="http://openweathermap.org/img/w/{{weathers.icon}}.png">
-            {% endif %}
         </div>
 
 
